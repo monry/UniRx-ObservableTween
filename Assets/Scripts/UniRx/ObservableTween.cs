@@ -110,22 +110,22 @@ namespace UniRx
             {typeof(Vector3), typeof(OperationalVector3)},
         };
 
-        public static IObservable<T> Tween<T>(T start, T finish, float duration, EaseType easeType, LoopType loopType = LoopType.None, Action onCompleteTween = null) where T : struct
+        public static IObservable<T> Tween<T>(T start, T finish, float duration, EaseType easeType, LoopType loopType = LoopType.None, Action onCompleteTween = null, bool ignoreTimeScale = false) where T : struct
         {
             return Tween(() => start, () => finish, () => duration, easeType, loopType, onCompleteTween);
         }
 
-        public static IObservable<T> Tween<T>(T start, T finish, Func<float> duration, EaseType easeType, LoopType loopType = LoopType.None, Action onCompleteTween = null) where T : struct
+        public static IObservable<T> Tween<T>(T start, T finish, Func<float> duration, EaseType easeType, LoopType loopType = LoopType.None, Action onCompleteTween = null, bool ignoreTimeScale = false) where T : struct
         {
             return Tween(() => start, () => finish, duration, easeType, loopType, onCompleteTween);
         }
 
-        public static IObservable<T> Tween<T>(Func<T> start, Func<T> finish, float duration, EaseType easeType, LoopType loopType = LoopType.None, Action onCompleteTween = null) where T : struct
+        public static IObservable<T> Tween<T>(Func<T> start, Func<T> finish, float duration, EaseType easeType, LoopType loopType = LoopType.None, Action onCompleteTween = null, bool ignoreTimeScale = false) where T : struct
         {
             return Tween(start, finish, () => duration, easeType, loopType, onCompleteTween);
         }
 
-        public static IObservable<T> Tween<T>(Func<T> start, Func<T> finish, Func<float> duration, EaseType easeType, LoopType loopType = LoopType.None, Action onCompleteTween = null) where T : struct
+        public static IObservable<T> Tween<T>(Func<T> start, Func<T> finish, Func<float> duration, EaseType easeType, LoopType loopType = LoopType.None, Action onCompleteTween = null, bool ignoreTimeScale = false) where T : struct
         {
             return Tween(
                 () => Activator.CreateInstance(OperationalStructMap[typeof(T)], start()) as OperationalStructBase<T>,
@@ -133,7 +133,8 @@ namespace UniRx
                 duration,
                 easeType,
                 loopType,
-                onCompleteTween
+                onCompleteTween,
+                ignoreTimeScale
             );
         }
 
@@ -164,7 +165,7 @@ namespace UniRx
             }
         }
 
-        private static IObservable<T> Tween<T>(Func<OperationalStructBase<T>> start, Func<OperationalStructBase<T>> finish, Func<float> duration, EaseType easeType, LoopType loopType, Action onCompleteTween) where T : struct
+        private static IObservable<T> Tween<T>(Func<OperationalStructBase<T>> start, Func<OperationalStructBase<T>> finish, Func<float> duration, EaseType easeType, LoopType loopType, Action onCompleteTween, bool ignoreTimeScale) where T : struct
         {
             T startValue = default;
             T finishValue = default;
@@ -184,9 +185,9 @@ namespace UniRx
 
             IObservable<T> stream = Observable.Empty<TweenInformation<T>>()
                 // Repeat() のために、毎回初期値を生成
-                .StartWith(() => new TweenInformation<T>(Time.time, start(), finish(), duration(), easeType, out startValue, out finishValue))
+                .StartWith(() => new TweenInformation<T>(ignoreTimeScale ? Time.unscaledTime : Time.time, start(), finish(), duration(), easeType, out startValue, out finishValue))
                 // Update のストリームに変換
-                .SelectMany(information => Observable.EveryUpdate().Do(_ => information.Time = Time.time - information.StartTime).Select(_ => information))
+                .SelectMany(information => Observable.Interval(TimeSpan.FromMilliseconds(1), ignoreTimeScale ? Scheduler.MainThreadIgnoreTimeScale : Scheduler.MainThread).Do(_ => information.Time = ignoreTimeScale ? Time.unscaledTime : Time.time - information.StartTime).Select(_ => information))
                 // Tween 時間が処理時間よりも小さい間流し続ける
                 .TakeWhile(information => information.Time <= information.Duration)
                 // 実際の Easing 処理実行
@@ -207,9 +208,9 @@ namespace UniRx
                         .Concat(
                             Observable.Empty<TweenInformation<T>>()
                                 // Repeat() のために、毎回初期値を生成
-                                .StartWith(() => new TweenInformation<T>(Time.time, start(), finish(), duration(), easeType, out startValue, out finishValue))
+                                .StartWith(() => new TweenInformation<T>(ignoreTimeScale ? Time.unscaledTime : Time.time, start(), finish(), duration(), easeType, out startValue, out finishValue))
                                 // Update のストリームに変換
-                                .SelectMany(information => Observable.EveryUpdate().Do(_ => information.Time = Time.time - information.StartTime).Select(_ => information))
+                                .SelectMany(information => Observable.Interval(TimeSpan.FromMilliseconds(1), ignoreTimeScale ? Scheduler.MainThreadIgnoreTimeScale : Scheduler.MainThread).Do(_ => information.Time = ignoreTimeScale ? Time.unscaledTime : Time.time - information.StartTime).Select(_ => information))
                                 // Tween 時間が処理時間よりも小さい間流し続ける
                                 .TakeWhile(information => information.Time <= information.Duration)
                                 // start と finish を入れ替えて、実際の Easing 処理実行
@@ -225,9 +226,9 @@ namespace UniRx
                         .Concat(
                             Observable.Empty<TweenInformation<T>>()
                                 // Repeat() のために、毎回初期値を生成
-                                .StartWith(() => new TweenInformation<T>(Time.time, start(), finish(), duration(), easeType, out startValue, out finishValue))
+                                .StartWith(() => new TweenInformation<T>(ignoreTimeScale ? Time.unscaledTime : Time.time, start(), finish(), duration(), easeType, out startValue, out finishValue))
                                 // Update のストリームに変換
-                                .SelectMany(information => Observable.EveryUpdate().Do(_ => information.Time = Time.time - information.StartTime).Select(_ => information))
+                                .SelectMany(information => Observable.Interval(TimeSpan.FromMilliseconds(1), ignoreTimeScale ? Scheduler.MainThreadIgnoreTimeScale : Scheduler.MainThread).Do(_ => information.Time = ignoreTimeScale ? Time.unscaledTime : Time.time - information.StartTime).Select(_ => information))
                                 // Tween 時間が処理時間よりも小さい間流し続ける
                                 .TakeWhile(information => information.Time <= information.Duration)
                                 // start と finish を入れ替えて、実際の Easing 処理実行
