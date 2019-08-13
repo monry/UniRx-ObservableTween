@@ -187,7 +187,7 @@ namespace UniRx
                 // Repeat() のために、毎回初期値を生成
                 .StartWith(() => new TweenInformation<T>(ignoreTimeScale ? Time.unscaledTime : Time.time, start(), finish(), duration(), easeType, out startValue, out finishValue))
                 // Update のストリームに変換
-                .SelectMany(information => Observable.Interval(TimeSpan.FromMilliseconds(1), ignoreTimeScale ? Scheduler.MainThreadIgnoreTimeScale : Scheduler.MainThread).Do(_ => information.Time = ignoreTimeScale ? Time.unscaledTime : Time.time - information.StartTime).Select(_ => information))
+                .SelectMany(information => Observable.Interval(TimeSpan.FromMilliseconds(1), ignoreTimeScale ? Scheduler.MainThreadIgnoreTimeScale : Scheduler.MainThread).Do(_ => information.Time = (ignoreTimeScale ? Time.unscaledTime : Time.time) - information.StartTime).Select(_ => information))
                 // Tween 時間が処理時間よりも小さい間流し続ける
                 .TakeWhile(information => information.Time <= information.Duration)
                 // 実際の Easing 処理実行
@@ -210,7 +210,7 @@ namespace UniRx
                                 // Repeat() のために、毎回初期値を生成
                                 .StartWith(() => new TweenInformation<T>(ignoreTimeScale ? Time.unscaledTime : Time.time, start(), finish(), duration(), easeType, out startValue, out finishValue))
                                 // Update のストリームに変換
-                                .SelectMany(information => Observable.Interval(TimeSpan.FromMilliseconds(1), ignoreTimeScale ? Scheduler.MainThreadIgnoreTimeScale : Scheduler.MainThread).Do(_ => information.Time = ignoreTimeScale ? Time.unscaledTime : Time.time - information.StartTime).Select(_ => information))
+                                .SelectMany(information => Observable.Interval(TimeSpan.FromMilliseconds(1), ignoreTimeScale ? Scheduler.MainThreadIgnoreTimeScale : Scheduler.MainThread).Do(_ => information.Time = (ignoreTimeScale ? Time.unscaledTime : Time.time) - information.StartTime).Select(_ => information))
                                 // Tween 時間が処理時間よりも小さい間流し続ける
                                 .TakeWhile(information => information.Time <= information.Duration)
                                 // start と finish を入れ替えて、実際の Easing 処理実行
@@ -228,7 +228,7 @@ namespace UniRx
                                 // Repeat() のために、毎回初期値を生成
                                 .StartWith(() => new TweenInformation<T>(ignoreTimeScale ? Time.unscaledTime : Time.time, start(), finish(), duration(), easeType, out startValue, out finishValue))
                                 // Update のストリームに変換
-                                .SelectMany(information => Observable.Interval(TimeSpan.FromMilliseconds(1), ignoreTimeScale ? Scheduler.MainThreadIgnoreTimeScale : Scheduler.MainThread).Do(_ => information.Time = ignoreTimeScale ? Time.unscaledTime : Time.time - information.StartTime).Select(_ => information))
+                                .SelectMany(information => Observable.Interval(TimeSpan.FromMilliseconds(1), ignoreTimeScale ? Scheduler.MainThreadIgnoreTimeScale : Scheduler.MainThread).Do(_ => information.Time = (ignoreTimeScale ? Time.unscaledTime : Time.time) - information.StartTime).Select(_ => information))
                                 // Tween 時間が処理時間よりも小さい間流し続ける
                                 .TakeWhile(information => information.Time <= information.Duration)
                                 // start と finish を入れ替えて、実際の Easing 処理実行
