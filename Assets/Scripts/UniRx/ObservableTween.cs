@@ -112,17 +112,17 @@ namespace UniRx
 
         public static IObservable<T> Tween<T>(T start, T finish, float duration, EaseType easeType, LoopType loopType = LoopType.None, Action onCompleteTween = null, bool ignoreTimeScale = false) where T : struct
         {
-            return Tween(() => start, () => finish, () => duration, easeType, loopType, onCompleteTween);
+            return Tween(() => start, () => finish, () => duration, easeType, loopType, onCompleteTween, ignoreTimeScale);
         }
 
         public static IObservable<T> Tween<T>(T start, T finish, Func<float> duration, EaseType easeType, LoopType loopType = LoopType.None, Action onCompleteTween = null, bool ignoreTimeScale = false) where T : struct
         {
-            return Tween(() => start, () => finish, duration, easeType, loopType, onCompleteTween);
+            return Tween(() => start, () => finish, duration, easeType, loopType, onCompleteTween, ignoreTimeScale);
         }
 
         public static IObservable<T> Tween<T>(Func<T> start, Func<T> finish, float duration, EaseType easeType, LoopType loopType = LoopType.None, Action onCompleteTween = null, bool ignoreTimeScale = false) where T : struct
         {
-            return Tween(start, finish, () => duration, easeType, loopType, onCompleteTween);
+            return Tween(start, finish, () => duration, easeType, loopType, onCompleteTween, ignoreTimeScale);
         }
 
         public static IObservable<T> Tween<T>(Func<T> start, Func<T> finish, Func<float> duration, EaseType easeType, LoopType loopType = LoopType.None, Action onCompleteTween = null, bool ignoreTimeScale = false) where T : struct
