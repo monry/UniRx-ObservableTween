@@ -54,6 +54,37 @@ namespace UniRx
         }
 
         [UnityTest]
+        public IEnumerator EaseSinusoidalTest()
+        {
+            {
+                var value = 0;
+                ObservableTween.Tween(0, 100, 1.0f, ObservableTween.EaseType.InSinusoidal).Subscribe(x => value = x);
+                yield return new WaitForSeconds(0.5f);
+                Assert.GreaterOrEqual(value, 30);
+                Assert.LessOrEqual(value, 35);
+                yield return new WaitForSeconds(0.6f);
+            }
+
+            {
+                var value = 0;
+                ObservableTween.Tween(0, 100, 1.0f, ObservableTween.EaseType.OutSinusoidal).Subscribe(x => value = x);
+                yield return new WaitForSeconds(0.5f);
+                Assert.GreaterOrEqual(value, 70);
+                Assert.LessOrEqual(value, 75);
+                yield return new WaitForSeconds(0.6f);
+            }
+
+            {
+                var value = 0;
+                ObservableTween.Tween(0, 100, 1.0f, ObservableTween.EaseType.InOutSinusoidal).Subscribe(x => value = x);
+                yield return new WaitForSeconds(0.5f);
+                Assert.GreaterOrEqual(value, 50);
+                Assert.LessOrEqual(value, 51);
+                yield return new WaitForSeconds(0.6f);
+            }
+        }
+
+        [UnityTest]
         public IEnumerator EaseBackTest()
         {
             {

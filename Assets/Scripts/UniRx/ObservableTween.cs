@@ -421,7 +421,7 @@ namespace UniRx
 
             private static OperationalStructBase<T> EaseInOutSinusoidal(float time, OperationalStructBase<T> initial, OperationalStructBase<T> delta, float duration)
             {
-                return -delta / 2.0f * (Mathf.Cos(Mathf.PI * time / duration) + 1.0f) + initial;
+                return -delta / 2.0f * (Mathf.Cos(Mathf.PI * time / duration) - 1.0f) + initial;
             }
 
             private static OperationalStructBase<T> EaseInExponential(float time, OperationalStructBase<T> initial, OperationalStructBase<T> delta, float duration)
