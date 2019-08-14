@@ -12,7 +12,9 @@
   "license": "MIT",
   "keywords": [],
   "category": "",
-  "dependencies": {},
+  "dependencies": {
+    "jp.cysharp.unirx": "7.1.0"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/monry/UniRx-ObservableTween"

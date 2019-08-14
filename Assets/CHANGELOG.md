@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.0.1-preview.6] - 2019-08-14
+
+* Add dependencies
+
+## [0.0.1-preview.5] - 2019-08-14
+
+* Update CHANGELOG
+
 ## [0.0.1-preview.4] - 2019-08-14
 
 * Fix bug in ease sine
