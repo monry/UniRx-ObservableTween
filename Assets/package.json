@@ -1,7 +1,7 @@
 {
   "name": "dev.monry.unirx-observabletween",
   "displayName": "UniRx Observable Tween",
-  "version": "0.0.1-preview.6",
+  "version": "0.1.0",
   "unity": "2019.2",
   "description": "Tweener library based on UniRx",
   "author": {
@@ -12,8 +12,7 @@
   "license": "MIT",
   "keywords": [],
   "category": "",
-  "dependencies": {
-  },
+  "dependencies": {},
   "repository": {
     "type": "git",
     "url": "https://github.com/monry/UniRx-ObservableTween"
